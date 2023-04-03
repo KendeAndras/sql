@@ -1,0 +1,47 @@
+--1.
+
+DELIMITER &&
+    CREATE PROCEDURE countKategoria()
+        BEGIN
+           SELECT COUNT(id) FROM kategoriak;
+        END &&
+DELIMITER ;
+
+CALL countKategoria( @idIN );
+
+
+
+-- 2.
+
+DELIMITER &&
+    CREATE PROCEDURE nev25(
+        IN idIn INT
+        )
+        BEGIN
+            SELECT nev FROM vevok
+            WHERE id = idIn;
+        END &&
+DELIMITER ;
+
+SET @idIn = 25;
+CALL nev25( @idIn );
+
+
+
+-- 3.
+
+DELIMITER &&
+    CREATE PROCEDURE levestAvg(
+        OUT avgPriceOUT INT
+        )
+        BEGIN
+            DECLARE avgPrice INT DEFAULT 0;
+            SELECT AVG(ar) INTO avgPrice FROM tesztak
+            INNER JOIN kategoriak ON tesztak.kategoriaId = kategoriak.id
+            WHERE kategoriak.nev = "Levestészták";
+            SET avgPriceOUT = avgPrice;
+        END &&
+DELIMITER ;
+
+CALL levestAvg( @avgPrice );
+SELECT @avgPrice AS atlag;
